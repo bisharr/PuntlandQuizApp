@@ -7,6 +7,7 @@ import Questions from "./components/Questions";
 import Error from "./components/Error";
 import NextQuestion from "./NextQuestion";
 import Progress from "./components/Progress";
+import FinishScreen from "./components/FinishScreen";
 
 const initialState = {
   questions: [],
@@ -36,6 +37,10 @@ function reducer(state, action) {
       };
     case "nextQuestion":
       return { ...state, index: state.index + 1, answer: null };
+    case "finish":
+      return { ...state, status: "finished" };
+    case "restart":
+      return { ...state, status: "ready", answer: null, index: 0, points: 0 };
 
     default:
       throw new Error("Unkown error");
@@ -45,6 +50,7 @@ function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { index, status, questions, answer, points } = state;
   const questionsLength = questions.length;
+  const totalPoints = questions.reduce((prev, cur) => prev + cur.points, 0);
 
   useEffect(function () {
     async function fetchQuestions() {
@@ -76,6 +82,8 @@ function App() {
               question={questions}
               numQuestions={questions.length}
               index={index}
+              answer={answer}
+              totalPoints={totalPoints}
             />
             <Questions
               question={questions[index]}
@@ -85,8 +93,20 @@ function App() {
               index={index}
               points={points}
             />
-            <NextQuestion dispatch={dispatch} answer={answer} />
+            <NextQuestion
+              dispatch={dispatch}
+              answer={answer}
+              numQuestions={questions.length}
+              index={index}
+            />
           </>
+        )}
+        {status === "finished" && (
+          <FinishScreen
+            totalPoints={totalPoints}
+            points={points}
+            dispatch={dispatch}
+          />
         )}
       </Main>
     </div>

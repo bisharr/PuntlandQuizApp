@@ -1,16 +1,29 @@
-function NextQuestion({ dispatch, answer }) {
+function NextQuestion({ dispatch, answer, index, numQuestions }) {
   if (answer === null) return null;
-  return (
-    <div>
-      <p>timer</p>
-      <button
-        onClick={() => dispatch({ type: "nextQuestion" })}
-        className="btn btn-ui"
-      >
-        Next
-      </button>
-    </div>
-  );
+  if (index < numQuestions - 1)
+    return (
+      <div>
+        <p>timer</p>
+        <button
+          onClick={() => dispatch({ type: "nextQuestion" })}
+          className="btn btn-ui"
+        >
+          Next
+        </button>
+      </div>
+    );
+  if (index === numQuestions - 1)
+    return (
+      <div>
+        <p>timer</p>
+        <button
+          onClick={() => dispatch({ type: "finish" })}
+          className="btn btn-ui"
+        >
+          Finish
+        </button>
+      </div>
+    );
 }
 
 export default NextQuestion;
