@@ -8,6 +8,9 @@ import Error from "./components/Error";
 import NextQuestion from "./NextQuestion";
 import Progress from "./components/Progress";
 import FinishScreen from "./components/FinishScreen";
+import Timer from "./Timer";
+
+const secs = 300;
 
 const initialState = {
   questions: [],
@@ -16,13 +19,19 @@ const initialState = {
   index: 0,
   answer: null,
   points: 0,
+  timeRemaining: null,
 };
 function reducer(state, action) {
   switch (action.type) {
     case "dataReceived":
       return { ...state, questions: action.payload, status: "ready" };
     case "start":
-      return { ...state, status: "active" };
+      return {
+        ...state,
+        status: "active",
+
+        timeRemaining: secs,
+      };
     case "error":
       return { ...state, status: "error" };
     case "newAnswers":
@@ -41,6 +50,13 @@ function reducer(state, action) {
       return { ...state, status: "finished" };
     case "restart":
       return { ...state, status: "ready", answer: null, index: 0, points: 0 };
+    case "timer":
+      return {
+        ...state,
+        timeRemaining: state.timeRemaining - 1,
+
+        status: state.timeRemaining === 0 ? "finished" : state.status,
+      };
 
     default:
       throw new Error("Unkown error");
@@ -48,7 +64,7 @@ function reducer(state, action) {
 }
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { index, status, questions, answer, points } = state;
+  const { index, status, questions, answer, points, timeRemaining } = state;
   const questionsLength = questions.length;
   const totalPoints = questions.reduce((prev, cur) => prev + cur.points, 0);
 
@@ -72,7 +88,11 @@ function App() {
         {status === "loading" && <Loader />}
 
         {status === "ready" && (
-          <StartScreen questionsLength={questionsLength} dispatch={dispatch} />
+          <StartScreen
+            questionsLength={questionsLength}
+            dispatch={dispatch}
+            secs={secs}
+          />
         )}
         {status === "error" && <Error />}
         {status === "active" && (
@@ -93,12 +113,15 @@ function App() {
               index={index}
               points={points}
             />
-            <NextQuestion
-              dispatch={dispatch}
-              answer={answer}
-              numQuestions={questions.length}
-              index={index}
-            />
+            <>
+              <Timer timeRemaining={timeRemaining} dispatch={dispatch} />
+              <NextQuestion
+                dispatch={dispatch}
+                answer={answer}
+                numQuestions={questions.length}
+                index={index}
+              />
+            </>
           </>
         )}
         {status === "finished" && (

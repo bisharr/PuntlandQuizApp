@@ -3,7 +3,6 @@ function NextQuestion({ dispatch, answer, index, numQuestions }) {
   if (index < numQuestions - 1)
     return (
       <div>
-        <p>timer</p>
         <button
           onClick={() => dispatch({ type: "nextQuestion" })}
           className="btn btn-ui"
@@ -15,7 +14,6 @@ function NextQuestion({ dispatch, answer, index, numQuestions }) {
   if (index === numQuestions - 1)
     return (
       <div>
-        <p>timer</p>
         <button
           onClick={() => dispatch({ type: "finish" })}
           className="btn btn-ui"

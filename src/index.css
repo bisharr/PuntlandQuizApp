@@ -162,7 +162,9 @@ progress {
   width: 100%;
   text-align: left;
 }
-
+.timeFinish {
+  background-color: rgba(196, 22, 22, 0.87);
+}
 .btn-option.correct {
   background-color: var(--color-theme);
   border: 2px solid var(--color-theme);
