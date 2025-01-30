@@ -1,8 +1,11 @@
-function Progress({ points, numQuestions, index, question, answer }) {
-  console.log(question);
-  const totalPoints = question.reduce((prev, cur) => prev + cur.points, 0);
-  console.log(totalPoints);
-
+function Progress({
+  points,
+  numQuestions,
+  index,
+  question,
+  answer,
+  totalPoints,
+}) {
   return (
     <header className="progress">
       <progress value={index + Number(answer !== null)} max={numQuestions} />
