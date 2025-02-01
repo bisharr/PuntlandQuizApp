@@ -17,6 +17,7 @@ function Options({ question, dispatch, answer }) {
         >
           {option}
         </button>
+hello
       ))}
     </div>
   );
