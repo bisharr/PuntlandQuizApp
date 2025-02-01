@@ -1,7 +1,7 @@
 function StartScreen({ questionsLength, dispatch, secs }) {
   return (
     <div className="start">
-      <h2>Welcome a Quick Quiz</h2>
+      <h2>Kusoo dhawaaw Puntland Quiz app</h2>
       <h3>{questionsLength} question to test your Puntland State Knowledge</h3>
       <p className="rules">
         <strong>Rules: </strong>
